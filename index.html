@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estoque de Brindes INPEL</title>
+<style>
+:root{--red:#c8202f;--dark:#871b26;--ink:#22252b;--muted:#747b86;--bg:#f5f5f7;--line:#e7e7eb}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden;overflow-y:auto}
+body{font:15px Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{padding:12px 5%;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:2}
+.brand{display:flex;align-items:center;gap:12px}.logo{background:var(--red);color:#fff;border-radius:12px;padding:14px 10px;font-weight:bold}.brand strong{display:block}.brand small{color:var(--muted)}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border:0;border-radius:9px;padding:10px 14px;font-weight:bold}.primary{background:var(--red);color:#fff}.light{background:#f0f0f3;color:#444}.ghost{background:#fff;color:#444;border:1px solid var(--line)}
+main{padding:28px 5% 90px}
+.content{max-width:1150px;margin:auto}
+h1{font-size:27px;margin:0 0 7px}p{color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0}
+.stat,.card{background:#fff;border:1px solid var(--line);border-radius:14px}.stat{padding:16px}.stat small{color:var(--muted);font-weight:bold;text-transform:uppercase;font-size:11px}.stat strong{display:block;font-size:27px;margin-top:6px}.red{color:var(--red)}
+.tools{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin:22px 0 14px}.tools input[type=search]{padding:11px 13px;border:1px solid var(--line);border-radius:9px;font:inherit;width:min(360px,100%)}
+.filters{display:flex;gap:7px}.filter{background:white;border:1px solid var(--line);color:#555}.filter.active{background:#fff0f1;color:var(--dark);border-color:#efc4c8}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.card{overflow:hidden;padding-bottom:14px;min-width:0}.photo{height:210px;background:linear-gradient(140deg,#fae9eb,#f1f1f4);display:grid;place-items:center;position:relative}.photo img{width:100%;height:100%;object-fit:cover}.emoji{font-size:58px}
+.badge{position:absolute;right:10px;top:10px;background:#e6f4eb;color:#176b3b;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:bold}.badge.low{background:#fff0df;color:#9b6000}.badge.out{background:#ffe6e8;color:#b21e2d}
+.cardcontent{padding:14px}.cardtop{display:flex;justify-content:space-between;gap:8px;align-items:start}.card h3{font-size:17px;margin:0 0 5px;overflow-wrap:anywhere}.category{font-size:12px;color:var(--muted)}
+.edit{padding:8px 12px;background:#f0f0f3;color:#333;font-size:13px}
+.balance{display:flex;justify-content:space-between;align-items:end;margin:17px 0 10px}.balance strong{font-size:27px}.balance span{font-size:12px;color:var(--muted)}.bar{height:5px;background:#eee;border-radius:9px;margin-bottom:13px;overflow:hidden}.bar i{height:100%;display:block;background:var(--red)}
+.actions{display:grid;grid-template-columns:64px 1fr 1fr;gap:6px}.actions input{width:100%;min-width:0;border:1px solid var(--line);border-radius:8px;text-align:center;font:inherit}.entry{background:#e8f5ed;color:#176b3b}.exit{background:#fff0f1;color:#a51e29}
+.empty{grid-column:1/-1;background:white;text-align:center;padding:38px 16px;border:1px dashed #d5d6dc;border-radius:14px}.empty div{font-size:38px}.empty h3{margin:8px}.empty p{margin-bottom:15px}.note{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+.overlay{position:fixed;inset:0;background:#1119;display:none;place-items:center;padding:15px;z-index:20;overflow:auto}.overlay.open{display:grid}.modal{width:min(460px,100%);max-height:none;background:white;border-radius:15px;padding:21px;margin:auto}.modal h2{margin:0 0 5px}.modal p{font-size:13px;margin-bottom:15px}.field{display:block;margin:12px 0}.field span{display:block;font-size:12px;font-weight:bold;margin-bottom:5px}.field input,.field select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.preview{width:68px;height:68px;margin-top:8px;border-radius:10px;background:#f6eeee;display:grid;place-items:center;overflow:hidden}.preview img{width:100%;height:100%;object-fit:cover}.modalactions{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.modalactions .right{display:flex;gap:8px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:11px 16px;border-radius:9px;display:none;z-index:30}
+#copyBox{display:none;margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}#copyBox textarea{width:100%;height:90px;font:12px Consolas,monospace}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.stats{gap:7px}.stat{padding:11px}.stat small{font-size:9px}.stat strong{font-size:22px}.row{gap:7px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">INPEL</div><div><strong>Estoque de brindes</strong><small>Controle visual e atualizado</small></div></div>
+  <div class="header-actions">
+    <button class="ghost" id="openButton" type="button">Abrir arquivo</button>
+    <button class="ghost" id="saveFileButton" type="button">Salvar arquivo</button>
+    <button class="primary" id="addButton" type="button">＋ Novo brinde</button>
+    <input id="openFile" type="file" accept=".json,.html,application/json,text/html" hidden>
+  </div>
+</header>
+<main>
+<div class="content">
+  <h1>Seus brindes, em um só lugar</h1>
+  <p>Cadastre os itens, edite quando precisar e salve um arquivo para não perder nada.</p>
+  <section class="stats">
+    <div class="stat"><small>Brindes cadastrados</small><strong id="itemCount">0</strong></div>
+    <div class="stat"><small>Unidades disponíveis</small><strong id="unitCount">0</strong></div>
+    <div class="stat"><small>Precisam de reposição</small><strong class="red" id="lowCount">0</strong></div>
+  </section>
+  <section class="tools">
+    <input id="search" type="search" placeholder="Buscar brinde...">
+    <div class="filters"><button class="filter active" data-filter="all" type="button">Todos</button><button class="filter" data-filter="low" type="button">Estoque baixo</button></div>
+  </section>
+  <section class="grid" id="cards"></section>
+  <div id="copyBox">
+    <p>Se o download não começar, copie o texto abaixo e cole num arquivo chamado estoque.json</p>
+    <textarea id="copyText" readonly></textarea>
+    <button class="primary" id="copyButton" type="button">Copiar</button>
+  </div>
+  <div class="note">O estoque fica neste navegador. Use Salvar arquivo para guardar uma cópia.</div>
+</div>
+</main>
+
+<div class="overlay" id="overlay">
+  <form class="modal" id="giftForm">
+    <h2 id="formTitle">Adicionar brinde</h2><p>Informe os dados e, se quiser, escolha uma foto.</p>
+    <input type="hidden" id="giftId">
+    <label class="field"><span>Nome do brinde</span><input id="name" required maxlength="60" placeholder="Ex.: Caneca personalizada"></label>
+    <div class="row">
+      <label class="field"><span>Categoria</span><input id="category" maxlength="35" placeholder="Ex.: Kit, vestuário"></label>
+      <label class="field"><span>Estoque mínimo</span><input id="minimum" type="number" min="0" step="1" value="5"></label>
+    </div>
+    <div class="row">
+      <label class="field"><span id="stockLabel">Quantidade</span><input id="stock" type="number" min="0" step="1" value="0"></label>
+      <label class="field"><span>Ícone</span><select id="emoji"><option>🎁</option><option>☕</option><option>🧢</option><option>👕</option><option>🔑</option><option>👜</option><option>📒</option><option>🧴</option><option>🧸</option></select></label>
+    </div>
+    <label class="field"><span>Foto do brinde (opcional)</span><input id="photoFile" type="file" accept="image/*"><div class="preview" id="preview">🎁</div></label>
+    <div class="modalactions">
+      <button type="button" class="exit" id="deleteButton" hidden>Excluir</button>
+      <div class="right"><button type="button" class="light" id="cancelButton">Cancelar</button><button class="primary" type="submit">Salvar</button></div>
+    </div>
+  </form>
+</div>
+<div id="toast"></div>
+<script id="seed" type="application/json">{"gifts":[],"moves":[],"savedAt":0}</script>
+<script>
+const KEY="inpel_brindes_preview";
+const $=id=>document.getElementById(id);
+let data={gifts:[],moves:[],savedAt:0},selectedPhoto=null,activeFilter="all";
+function parseState(raw){
+  if(!raw||!Array.isArray(raw.gifts))return null;
+  return {gifts:raw.gifts,moves:Array.isArray(raw.moves)?raw.moves:[],savedAt:Number(raw.savedAt)||0};
+}
+function load(){
+  let embedded=null;
+  try{embedded=parseState(JSON.parse($("seed").textContent))}catch(e){}
+  let local=null;
+  try{local=parseState(JSON.parse(localStorage.getItem(KEY)))}catch(e){}
+  if(local&&embedded)data=(local.savedAt>=embedded.savedAt)?local:embedded;
+  else data=local||embedded||{gifts:[],moves:[],savedAt:0};
+  data.gifts.forEach(g=>{g.id=String(g.id)});
+  data.moves.forEach(m=>{m.giftId=String(m.giftId)});
+}
+function persist(){
+  data.savedAt=Date.now();
+  try{localStorage.setItem(KEY,JSON.stringify(data));return true}
+  catch(e){notify("Não foi possível gravar neste navegador. Use Salvar arquivo.");return false}
+}
+function delta(g){
+  return data.moves.filter(m=>String(m.giftId)===String(g.id)).reduce((n,m)=>{
+    const amount=Number(m.amount!=null?m.amount:m.quantity)||0;
+    const entrada=m.type==="entrada"||m.type==="Entrada";
+    return n+(entrada?amount:-amount);
+  },0);
+}
+function quantity(g){return (Number(g.initial)||0)+delta(g)}
+function notify(text){$("toast").textContent=text;$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",2400)}
+function render(){
+  const query=$("search").value.trim().toLowerCase();
+  $("itemCount").textContent=data.gifts.length;
+  $("unitCount").textContent=data.gifts.reduce((n,g)=>n+quantity(g),0);
+  $("lowCount").textContent=data.gifts.filter(g=>quantity(g)<=Number(g.minimum||0)).length;
+  const shown=data.gifts.filter(g=>(activeFilter==="all"||quantity(g)<=Number(g.minimum||0))&&String(g.name||"").toLowerCase().includes(query));
+  const cards=$("cards");
+  cards.replaceChildren();
+  if(!shown.length){
+    const empty=document.createElement("div");
+    empty.className="empty";
+    empty.innerHTML=data.gifts.length?'<div>🔎</div><h3>Nenhum brinde encontrado</h3><p>Mude a busca ou o filtro para ver os itens.</p>':'<div>🎁</div><h3>Seu estoque começa aqui</h3><p>Cadastre o primeiro brinde para acompanhar as quantidades.</p>';
+    if(!data.gifts.length){
+      const btn=document.createElement("button");
+      btn.className="primary";btn.type="button";btn.textContent="＋ Adicionar brinde";
+      btn.addEventListener("click",()=>openForm(null));
+      empty.append(btn);
+    }
+    cards.append(empty);
+    return;
+  }
+  shown.forEach(g=>{
+    const n=quantity(g),low=n<=Number(g.minimum||0),out=n<=0;
+    const card=document.createElement("article");card.className="card";
+    const photo=document.createElement("div");photo.className="photo";
+    if(g.photo){const img=document.createElement("img");img.src=g.photo;img.alt=g.name;photo.append(img)}
+    else{const icon=document.createElement("span");icon.className="emoji";icon.textContent=g.emoji||"🎁";photo.append(icon)}
+    const badge=document.createElement("span");badge.className="badge"+(out?" out":low?" low":"");badge.textContent=out?"Sem estoque":low?"Estoque baixo":"Disponível";photo.append(badge);
+    const content=document.createElement("div");content.className="cardcontent";
+    const top=document.createElement("div");top.className="cardtop";
+    const nameBox=document.createElement("div"),title=document.createElement("h3"),category=document.createElement("div");
+    title.textContent=g.name;category.className="category";category.textContent=g.category||"Brinde";nameBox.append(title,category);
+    const edit=document.createElement("button");edit.type="button";edit.className="edit";edit.textContent="Editar";
+    edit.addEventListener("click",()=>openForm(g));
+    top.append(nameBox,edit);
+    const balance=document.createElement("div");balance.className="balance";
+    const strong=document.createElement("strong");strong.textContent=String(n);
+    const span=document.createElement("span");span.innerHTML="unidades<br>Mínimo: "+Number(g.minimum||0);
+    balance.append(strong,span);
+    const bar=document.createElement("div");bar.className="bar";const fill=document.createElement("i");
+    const base=Math.max(Number(g.minimum||0)*2,1);
+    fill.style.width=Math.max(4,Math.min(100,Math.round(n/base*100)))+"%";bar.append(fill);
+    const actions=document.createElement("div");actions.className="actions";
+    const amount=document.createElement("input");amount.type="number";amount.min="1";amount.step="1";amount.value="1";amount.setAttribute("aria-label","Quantidade");
+    const entry=document.createElement("button");entry.type="button";entry.className="entry";entry.textContent="+ Entrada";
+    const exit=document.createElement("button");exit.type="button";exit.className="exit";exit.textContent="− Saída";
+    entry.addEventListener("click",()=>move(g,"entrada",amount));
+    exit.addEventListener("click",()=>move(g,"saida",amount));
+    actions.append(amount,entry,exit);content.append(top,balance,bar,actions);card.append(photo,content);cards.append(card);
+  });
+}
+function move(gift,type,input){
+  const amount=Math.max(1,Number(input.value)||1);
+  if(type==="saida"&&amount>quantity(gift)){notify("A saída é maior que o saldo disponível.");return}
+  data.moves.unshift({giftId:String(gift.id),type:type,amount:amount});
+  persist();render();notify(type==="entrada"?"Entrada registrada.":"Saída registrada.");
+}
+function openForm(g){
+  selectedPhoto=null;
+  $("giftForm").reset();
+  $("giftId").value=g?String(g.id):"";
+  $("formTitle").textContent=g?"Editar brinde":"Adicionar brinde";
+  $("stockLabel").textContent=g?"Quantidade atual":"Quantidade";
+  $("deleteButton").hidden=!g;
+  $("name").value=g?g.name:"";
+  $("category").value=g?(g.category||""):"";
+  $("stock").value=g?quantity(g):0;
+  $("minimum").value=g?Number(g.minimum||0):5;
+  $("emoji").value=(g&&g.emoji)?g.emoji:"🎁";
+  $("preview").replaceChildren();
+  if(g&&g.photo){const img=document.createElement("img");img.src=g.photo;img.alt="";$("preview").append(img)}
+  else $("preview").textContent=g&&g.emoji?g.emoji:"🎁";
+  $("overlay").classList.add("open");
+  $("name").focus();
+}
+function closeForm(){$("overlay").classList.remove("open")}
+function download(name,text,type){
+  const blob=new Blob([text],{type:type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=name;document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+function saveFile(){
+  persist();
+  const payload=JSON.stringify(data,null,2);
+  $("copyText").value=payload;
+  $("copyBox").style.display="block";
+  download("estoque-brindes.json",payload,"application/json");
+  notify("Arquivo salvo. Guarde o estoque-brindes.json.");
+}
+function applyState(next){
+  const parsed=parseState(next);
+  if(!parsed){notify("Esse arquivo não é um estoque válido.");return}
+  data=parsed;
+  data.gifts.forEach(g=>{g.id=String(g.id)});
+  data.moves.forEach(m=>{m.giftId=String(m.giftId)});
+  data.savedAt=Date.now();
+  persist();render();notify("Estoque aberto.");
+}
+$("addButton").addEventListener("click",()=>openForm(null));
+$("cancelButton").addEventListener("click",closeForm);
+$("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))closeForm()});
+$("deleteButton").addEventListener("click",()=>{
+  const id=$("giftId").value;
+  if(!id)return;
+  data.gifts=data.gifts.filter(g=>String(g.id)!==id);
+  data.moves=data.moves.filter(m=>String(m.giftId)!==id);
+  persist();render();closeForm();notify("Brinde excluído.");
+});
+$("photoFile").addEventListener("change",e=>{
+  const file=e.target.files&&e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const scale=Math.min(1,650/Math.max(img.width,img.height));
+      const canvas=document.createElement("canvas");
+      canvas.width=Math.max(1,Math.round(img.width*scale));
+      canvas.height=Math.max(1,Math.round(img.height*scale));
+      canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+      selectedPhoto=canvas.toDataURL("image/jpeg",0.74);
+      $("preview").replaceChildren();
+      const view=document.createElement("img");view.src=selectedPhoto;view.alt="";$("preview").append(view);
+    };
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+});
+$("giftForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const id=$("giftId").value;
+  const name=$("name").value.trim();
+  if(!name)return;
+  if(data.gifts.some(g=>g.name.toLowerCase()===name.toLowerCase()&&String(g.id)!==id)){notify("Já existe um brinde com esse nome.");return}
+  const old=data.gifts.find(g=>String(g.id)===id);
+  const desired=Math.max(0,Number($("stock").value)||0);
+  const gift={
+    id:id||String(Date.now()),
+    name:name,
+    category:$("category").value.trim(),
+    minimum:Math.max(0,Number($("minimum").value)||0),
+    emoji:$("emoji").value||"🎁",
+    photo:selectedPhoto!=null?selectedPhoto:(old?old.photo||"":"")
+  };
+  gift.initial=old?desired-delta(old):desired;
+  if(old)Object.assign(old,gift);else data.gifts.push(gift);
+  persist();render();closeForm();notify(old?"Brinde atualizado.":"Brinde salvo.");
+});
+$("search").addEventListener("input",render);
+document.querySelectorAll(".filter").forEach(button=>button.addEventListener("click",()=>{
+  activeFilter=button.dataset.filter;
+  document.querySelectorAll(".filter").forEach(item=>item.classList.toggle("active",item===button));
+  render();
+}));
+$("saveFileButton").addEventListener("click",saveFile);
+$("openButton").addEventListener("click",()=>$("openFile").click());
+$("openFile").addEventListener("change",async e=>{
+  const file=e.target.files&&e.target.files[0];
+  e.target.value="";
+  if(!file)return;
+  try{
+    const text=await file.text();
+    const fromHtml=text.match(/<script id="seed" type="application\/json">([\s\S]*?)<\/script>/);
+    applyState(JSON.parse(fromHtml?fromHtml[1]:text));
+  }catch(err){notify("Não consegui ler esse arquivo.")}
+});
+$("copyButton").addEventListener("click",async()=>{
+  try{await navigator.clipboard.writeText($("copyText").value);notify("Texto copiado.")}
+  catch(e){$("copyText").select();notify("Selecione o texto e copie com Ctrl+C.")}
+});
+load();
+render();
+</script>
+</body>
+</html>
